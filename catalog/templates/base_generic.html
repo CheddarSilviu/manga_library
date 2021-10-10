@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      {% block title %}<title>Manga Kissa</title>{% endblock %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1"> 
+      <!-- Add additional CSS in static file -->
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+      <style>
+          {% load static %}
+          body {
+            background: url("{% static 'images/wall.jpg' %}") no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            margin-top: 111px;
+          }
+      </style>
+</head>
+<body>
+  <header>
+      {% block sidebar %}
+      <label class = "logo"><p>Manga-Kissa Library</p></label> 
+      <nav class="nav-menu">
+          <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'books' %}">All books</a></li>
+            <li><a href="{% url 'authors' %}">All authors</a></li>
+            {% if user.is_authenticated %}
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'my-borrowed' %}">My borrowed</a></li>
+            
+                
+            {% if perms.catalog.can_mark_returned %}
+            <li><a href="{% url 'all-librarian' %}">Librarian books</a></li>
+            {% endif %}
+
+              
+            <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li> 
+            {% else %}
+            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
+            {% endif %}
+          </ul>
+      </nav>
+      {% endblock %}
+  </header>
+
+  <div class="wrapper">
+      <div class = "min-header">
+        <h1>Welcome to Manga-Kissa manga library, a website by Silviu Daniel.</h1>
+      </div>
+      <section class = "main-info">
+          <article class="general">{% block content %}{% endblock %}</article>
+      </section>
+  </div>
+</body>
+</html>
